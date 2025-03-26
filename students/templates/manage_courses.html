@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Manage Courses</h2>
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
+    <form method="post" class="mb-3">
+        {% csrf_token %}
+        <input type="hidden" name="add" value="true">
+        <div class="form-group">
+            <label for="course_name">Course Name</label>
+            <input type="text" class="form-control" id="course_name" name="course_name" required>
+        </div>
+        <div class="form-group">
+            <label for="duration">Duration</label>
+            <input type="text" class="form-control" id="duration" name="duration" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Course</button>
+    </form>
+    <h3>Existing Courses</h3>
+    {% if courses %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Course Name</th>
+                    <th>Duration</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                    <tr>
+                        <td>{{ course.name }}</td>
+                        <td>{{ course.duration }}</td>
+                        <td>
+                            <form method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="update" value="true">
+                                <input type="hidden" name="course_id" value="{{ course.name }}">
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-sm" name="new_name" placeholder="New Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-sm" name="new_duration" placeholder="New Duration" required>
+                                </div>
+                                <button type="submit" class="btn btn-warning btn-sm">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No courses found.</p>
+    {% endif %}
+</div>
+{% endblock %}

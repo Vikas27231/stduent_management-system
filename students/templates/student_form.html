@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-primary">{{ action }} Student</h2>
+    {% if error %}
+        <p class="text-danger">{{ error }}</p>
+    {% endif %}
+    <form method="post" enctype="multipart/form-data" class="mt-3">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="student_id">Student ID</label>
+            <input type="text" class="form-control" id="student_id" name="student_id" value="{{ student.student_id|default:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ student.first_name|default:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ student.last_name|default:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ student.email|default:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="date_of_birth">Date of Birth</label>
+            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ student.date_of_birth|default:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="mobile_number">Mobile Number</label>
+            <input type="text" class="form-control" id="mobile_number" name="mobile_number" value="{{ student.mobile_number|default:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="course">Course</label>
+            <select class="form-control" id="course" name="course" required>
+                <option value="MCA" {% if student.course == 'MCA' %}selected{% endif %}>Master of Computer Application (MCA)</option>
+                <option value="BCA" {% if student.course == 'BCA' %}selected{% endif %}>Bachelor of Computer Application (BCA)</option>
+                <option value="BSc" {% if student.course == 'BSc' %}selected{% endif %}>BSc in Data Science</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="subjects">Subjects</label>
+            <select class="form-control" id="subjects" name="subjects" multiple required>
+                <option value="Electronics" {% if 'Electronics' in student.subjects %}selected{% endif %}>Electronics</option>
+                <option value="Math" {% if 'Math' in student.subjects %}selected{% endif %}>Math</option>
+                <option value="Programming" {% if 'Programming' in student.subjects %}selected{% endif %}>Programming</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="profile_picture">Profile Picture</label>
+            <input type="file" class="form-control-file" id="profile_picture" name="profile_picture">
+            {% if student.profile_picture %}
+                <p>Current Picture: <a href="{{ student.profile_picture }}" target="_blank">View</a></p>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">{{ action }}</button>
+    </form>
+</div>
+{% endblock %}
