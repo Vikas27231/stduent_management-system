@@ -1,0 +1,14 @@
+{
+    "AWSEBDockerrunVersion": "1",
+    "Image": {
+      "Name": "satya368/student-management-5:latest",
+      "Update": "true"
+    },
+    "Ports": [
+      {
+        "ContainerPort": 8000,
+        "HostPort": 80
+      }
+    ],
+    "Logging": "/var/log/nginx"
+  }
