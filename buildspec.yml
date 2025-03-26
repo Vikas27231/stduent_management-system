@@ -1,0 +1,31 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+      - export IMAGE_TAG=$(date +%Y%m%d%H%M%S)
+  build:
+    commands:
+      - docker build -t satya368/student-management-5:$IMAGE_TAG .
+      - echo "Pushing the image to Docker Hub..."
+      - docker push satya368/student-management-5:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo "Writing Dockerrun.aws.json file..."
+      - |
+        echo '{
+          "AWSEBDockerrunVersion": "1",
+          "Image": {
+            "Name": "satya368/student-management-5:'$IMAGE_TAG'",
+            "Update": "true"
+          },
+          "Ports": [
+            {
+              "ContainerPort": 80
+            }
+          ]
+        }' > Dockerrun.aws.json
+      - echo "Build completed on $(date)"
+artifacts:
+  files:
+    - Dockerrun.aws.json
